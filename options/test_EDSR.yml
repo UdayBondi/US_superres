@@ -1,0 +1,52 @@
+#### general settings
+name: 003_RRDB_ESRGANx4_DIV2K
+model: edsr
+distortion: sr
+scale: 4
+gpu_ids: 2
+
+#### datasets
+datasets:
+  color: RGB
+  train:
+    name: fetal_us
+    mode: LRHR
+    data_folder: /uday/Projects/usydney/Fetal_US_SR/Data/head_US
+    Partial_train: False
+    use_shuffle: true
+    n_workers: 6  # per GPU
+    batch_size: 16
+    GT_size: 128
+    use_flip: true
+    use_rot: true
+    Normalize:
+      mean: 0.5
+      std:  0.5
+
+  val:
+    name: liver_val_set
+    mode: LRHR
+    hr_dir: /mnt/SSD/xtwang/BasicSR_datasets/val_set14_part/Set14
+    lr_dir: /mnt/SSD/xtwang/BasicSR_datasets/val_set14_part/Set14_bicLRx4
+    Normalize:
+      mean: 0.5
+      std:  0.5
+    
+
+#### network structures
+network:
+  n_resblocks: 32
+  n_feats: 256
+  scale: 4
+  rgb_range: 1
+  n_colors: 3
+  res_scale: 0.1
+
+#### path
+path:
+  best_model: ../model/EDSR_x4.pt
+  results_path: ./results/test
+
+
+
+
