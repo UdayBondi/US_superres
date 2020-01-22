@@ -5,6 +5,9 @@ Functions to apply transfer learning to train the model and test it.
 """
 
 import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.optim import lr_scheduler
 import numpy as np
 import matplotlib.pyplot as plt 
 import time
@@ -19,6 +22,8 @@ from skimage import io
 import scipy.misc as sc_msc
 import cv2
 from data.dataloader import test_us_dataset
+import pathlib
+
 
 def train_model(model, dataloaders, dataset_sizes, device, criterion, optimizer, scheduler, opts):
 	"""
@@ -33,18 +38,18 @@ def train_model(model, dataloaders, dataset_sizes, device, criterion, optimizer,
 	scheduler:     Pytorch scheduling to change the learning rate
 	opts:          Options file
 	"""
-	create_directory(opts['path']['save_path']+'_'+opts['name'])
-	progress = log2file(opts['path']['save_path']+'_'+opts['name'])
+	create_directory(opts['path']['save_path'],'train_'+opts['name'])
+	progress = log2file(opts['path']['save_path']+'train_'+opts['name'])
 	since = time.time()
 	best_model_wts = copy.deepcopy(model.state_dict())
 	best_acc = 0.0
 
-	for epoch in range(opts['num_epochs']):
-		print('Epoch {}/{}'.format(epoch, opts['num_epochs']-1))
-		print('-'*10)
-		print("==> Learning rate: ")
+	for epoch in range(opts['training_params']['num_epochs']):
+		progress._log('Epoch {}/{}'.format(epoch, opts['training_params']['num_epochs']-1))
+		progress._log('-'*10)
+		progress._log("==> Learning rate: ")
 		for param_group in optimizer.param_groups:
-			print(param_group['lr'])
+			progress._log(str(param_group['lr']))
 
 		for phase in ['train', 'val']:
 
@@ -87,16 +92,16 @@ def train_model(model, dataloaders, dataset_sizes, device, criterion, optimizer,
 
 			epoch_loss = running_loss / dataset_sizes[phase]
 			epoch_acc = running_acc/ dataset_sizes[phase]
-			io.imsave(opts['path']['save_path']+'_'+opts['name']+'/'+'test_result.png', recon_out)
-			io.imsave(opts['path']['save_path']+'_'+opts['name']+'/'+'input.png', to_save[0,0])
+			io.imsave(opts['path']['save_path']+'train_'+opts['name']+'/'+'test_result.png', recon_out)
+			io.imsave(opts['path']['save_path']+'train_'+opts['name']+'/'+'input.png', to_save[0,0])
 
-			print('{} Loss: {:.4f} psnr: {:.4f}'.format(phase, epoch_loss, epoch_acc))
+			progress._log('{} Loss: {:.4f} psnr: {:.4f}'.format(phase, epoch_loss, epoch_acc))
 
 			if phase =='val' and epoch_acc>best_acc:
 				best_acc = epoch_acc
 				best_model_wts = copy.deepcopy(model.state_dict())
 				progress._log("$$$$$$----Saving the best model-----$$$$$")
-				torch.save(model.state_dict(), '.saved_models/'+opts['name']+'_best_model.pt')
+				torch.save(model.state_dict(), opts['path']['save_path']+'train_'+opts['name']+'/'+opts['name']+'_best_model.pt')
 
 	time_elapsed = time.time() -since
 
@@ -151,7 +156,7 @@ def fine_tune_edsr(model, us_dataloader, dataset_sizes, device, opts):
     param_lr_list = [{'params': model.head.parameters(), 'lr': opts['training_params']['lr_head']},
                      {'params': model.body[0:4].parameters(), 'lr': opts['training_params']['lr_body1']},
                      {'params': model.body[4:].parameters(), 'lr': opts['training_params']['lr_body2']},
-                     {'params': model.tail.parameters(), 'lr': opts['training_params']}['lr_tail'] ]
+                     {'params': model.tail.parameters(), 'lr': opts['training_params']['lr_tail']} ]
 
     optimizer_ft = optim.Adam(param_lr_list, lr = 0.0001)
     exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=50, gamma=0.6)

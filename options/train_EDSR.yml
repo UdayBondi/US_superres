@@ -3,7 +3,7 @@ name: 003_RRDB_ESRGANx4_DIV2K
 model: edsr
 distortion: sr
 scale: 4
-gpu_ids: 2
+gpu_ids: 0
 
 #### datasets
 datasets:
@@ -11,11 +11,11 @@ datasets:
   train:
     name: liver_us
     mode: LRHR
-    data_folder: /uday/Projects/usydney/Fetal_US_SR/Data/head_US
-    Partial_train: False
+    data_folder: /home/uday/DL/SR/Data/head_US
+    Partial_train: true
     use_shuffle: true
     n_workers: 6  # per GPU
-    batch_size: 16
+    batch_size: 1
     GT_size: 128
     use_flip: true
     use_rot: true
@@ -38,20 +38,23 @@ network:
   n_resblocks: 32
   n_feats: 256
   scale: 4
-  rgb_range: 1
+  rgb_range: 255
   n_colors: 3
   res_scale: 0.1
 
 #### path
 path:
-  pretrain_model: ../model/EDSR_x4.pt
-  save_path: ./results/train
+  pretrain_model: /home/uday/DL/SR/Model/Pretrained/
+  # Gives an error if '/' is not placed. Correct it. 
+  save_path: ./results/
 
 #### training settings: learning rate scheme, loss
 training_params:
+  num_epochs: 2
   lr_head: !!float 1e-5
   lr_body1: !!float 1e-5
   lr_body2: !!float 1e-4
   lr_tail: !!float 1e-3
+
 
 

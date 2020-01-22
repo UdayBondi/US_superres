@@ -109,17 +109,17 @@ def get_list_of_files(folder_path,datatype):
 	"""
 	Returns the list of files in the given folder
 	"""
-    list_of_files = glob.glob(folder_path+datatype+'_set/*HC.png')
-    return list_of_files
+	list_of_files = glob.glob(folder_path+datatype+'_set/*HC.png')
+	return list_of_files
 
 def create_directory(folder_path, directory='downsampled_images/'):
-    if not os.path.exists(folder_path+directory):
-        os.makedirs(folder_path+directory)
+	if not os.path.exists(folder_path+directory):
+		os.makedirs(folder_path+directory)
 
 
 def downsample_img(img, scale=4):
-    red_img = block_reduce(img,block_size =(scale,scale,1) , func = np.mean)
-    return red_img
+	red_img = block_reduce(img,block_size =(scale,scale,1) , func = np.mean)
+	return red_img
 
 def downsample_imgs_to(source_dir, target_dir, scaling_factor, resize='True'):
 
@@ -133,16 +133,16 @@ def downsample_imgs_to(source_dir, target_dir, scaling_factor, resize='True'):
 
 
 def create_downsampled_imgs(folder_path, scaling_factor,dataset = 'train', resize='True'):
-    
-    files_list = get_list_of_files(folder_path, dataset)
-    for img_path in files_list:
-        img = imread(img_path)
-        img_file_name = img_path.replace(folder_path+dataset+"_set/","")
-        dwn_smpled_img = downsample_img(img, scaling_factor)
-        if resize:
-               dwn_smpled_img= scipy.misc.imresize(dwn_smpled_img, img.shape, interp='bicubic') 
-        create_directory(folder_path, directory = 'downsampled_images_'+dataset+'_'+str(scaling_factor))
-        sc_msc.imsave(folder_path+'downsampled_images_'+dataset+'_'+str(scaling_factor)+'/'+dataset+'_r'+str(scaling_factor)+'_'+img_file_name,dwn_smpled_img)     
+	
+	files_list = get_list_of_files(folder_path, dataset)
+	for img_path in files_list:
+		img = imread(img_path)
+		img_file_name = img_path.replace(folder_path+dataset+"_set/","")
+		dwn_smpled_img = downsample_img(img, scaling_factor)
+		if resize:
+			   dwn_smpled_img= scipy.misc.imresize(dwn_smpled_img, img.shape, interp='bicubic') 
+		create_directory(folder_path, directory = 'downsampled_images_'+dataset+'_'+str(scaling_factor))
+		sc_msc.imsave(folder_path+'downsampled_images_'+dataset+'_'+str(scaling_factor)+'/'+dataset+'_r'+str(scaling_factor)+'_'+img_file_name,dwn_smpled_img)     
 
 
 def prepare_data_training(folder_path, fraction_val = 0.25):

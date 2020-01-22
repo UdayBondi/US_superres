@@ -23,7 +23,7 @@ import numpy as np
 from skimage import io, transform, color
 import imageio
 import math
-from data_utils import get_patches, reconstruct_image_from_patches
+from data.data_utils import get_patches, reconstruct_image_from_patches
 import torchvision.transforms.functional as TF
 
 

@@ -4,7 +4,7 @@ Author: Uday Bondi      (inspired by original EDSR git repo)
 EDSR network definition
 Load an existing trained model. 
 """
-import common
+import model.common as common
 
 import torch.nn as nn
 
