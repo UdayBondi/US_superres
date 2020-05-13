@@ -40,6 +40,7 @@ def train_model(model, dataloaders, dataset_sizes, device, criterion, optimizer,
 	"""
 	create_directory(opts['path']['save_path'],'train_'+opts['name'])
 	progress = log2file(opts['path']['save_path']+'train_'+opts['name'])
+	#progress._log_settings(opts)
 	since = time.time()
 	best_model_wts = copy.deepcopy(model.state_dict())
 	best_acc = 0.0

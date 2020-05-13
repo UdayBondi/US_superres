@@ -64,15 +64,6 @@ class log2file():
         f = open(self.file, 'w')
         f.close()
 
-    def _log_settings(self, opts):
-
-    	with open(self.file, 'a') as f:
-
-    		f.write("OPTIONS USED: \n")
-
-    	    f.writelines(opts)
-    	    f.write('$$-----------------------$$')
-
     def _log(self,string):
 
         print(string)

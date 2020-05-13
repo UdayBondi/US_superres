@@ -1,9 +1,9 @@
 #### general settings
-name: 003_RRDB_ESRGANx4_DIV2K
+name: test
 model: edsr
 distortion: sr
 scale: 4
-gpu_ids: 0
+gpu_ids: 1
 
 #### datasets
 datasets:
@@ -11,7 +11,7 @@ datasets:
   train:
     name: liver_us
     mode: LRHR
-    data_folder: /home/uday/DL/SR/Data/head_US
+    data_folder: /home/uday/DL/SR/Data/fetal_head_data_area
     Partial_train: true
     use_shuffle: true
     n_workers: 6  # per GPU
@@ -46,7 +46,7 @@ network:
 path:
   pretrain_model: /home/uday/DL/SR/Model/Pretrained/
   # Gives an error if '/' is not placed. Correct it. 
-  save_path: ./results/
+  save_path: ../results/
 
 #### training settings: learning rate scheme, loss
 training_params:

@@ -1,5 +1,5 @@
 import yaml
-
+from shutil import copyfile
 def add_defaults(opts):
 
 	opts['mode']= 'train'
@@ -11,8 +11,12 @@ def get_options(opts_path):
 	
 	add_defaults(opts)
 
+	
 	return opts
 
-def save_options(opts_path, save_path):
+def save_options(opts_path, to_save_path):
+
+	copyfile(opts_path, to_save_path+'/train_options.yml')
+
 
 	

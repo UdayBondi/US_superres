@@ -9,7 +9,7 @@ from data.dataloader import *
 from data.data_utils import prepare_data_training
 from model.edsr import make_model
 from trainer import train_model, fine_tune_edsr
-from options.options import get_options
+from options.options import get_options, save_options
 import argparse
     
 
@@ -47,6 +47,8 @@ if __name__ == '__main__':
     print('---------Applying Transfer Learning-------')
     model.load_state_dict(torch.load(opts['path']['pretrain_model']+'EDSR_x'+str(opts['scale'])+'.pt'))
     ft_model = fine_tune_edsr(model, us_dataloader, us_data_sizes ,device, opts)
+
+    save_options(args.opath, opts['path']['save_path']+'train_'+opts['name'])
 
 
 
