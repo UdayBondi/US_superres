@@ -67,7 +67,6 @@ def train_model(model, dataloaders, dataset_sizes, device, criterion, optimizer,
 				inputs, labels = sample['lr'], sample['hr']
 				to_save = inputs
 				inputs = torch.from_numpy(get_patches(inputs, patch_size=(56,56)))
-
 				labels_patches = torch.from_numpy(get_patches(labels, patch_size= (56*4,56*4)))
 				inputs = inputs.to(device)
 				labels_patches = labels_patches.to(device)
@@ -123,9 +122,12 @@ def test_model(model, dataloaders, dataset_sizes, device, opts):
 	device: Device where the training needs to be done
 	opts: Options file
 	"""
+
+	model = model.to(device)
 	model.eval()
-	create_directory(opts.save_path, '')
-	progress = log2file(opts['path']['results_path'])
+	create_directory(opts['path']['save_path'],'test_'+opts['name'])
+	test_save_path = opts['path']['save_path']+'test_'+opts['name']+'/'
+	progress = log2file(test_save_path)
 	running_acc = 0
 
 	for sample in tqdm(dataloaders['val']):
@@ -133,11 +135,12 @@ def test_model(model, dataloaders, dataset_sizes, device, opts):
 		_inputs, labels , img_name= sample['lr'], sample['hr'], sample['name'][0].split('.')[0]
 
 		inputs = torch.from_numpy(get_patches(_inputs, patch_size=(56,56))).to(device)
+
 		outputs = model(inputs)
 		recon_out = reconstruct_image_from_patches(outputs.cpu().detach().numpy(), (56*4,56*4))
 		running_acc = calculate_psnr(recon_out*255, labels.numpy()[0,0]*255)
 
-		io.imsave(opts.save_path+img_name+'.png', recon_out)
+		io.imsave(test_save_path+img_name+'.png', recon_out)
 		progress._log("PSNR: {}".format(running_acc))
 		progress._log("Name: {} \n ------------".format(img_name))
 

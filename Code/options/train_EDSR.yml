@@ -4,7 +4,6 @@ model: edsr
 distortion: sr
 scale: 4
 gpu_ids: 1
-
 #### datasets
 datasets:
   color: RGB
@@ -12,7 +11,7 @@ datasets:
     name: liver_us
     mode: LRHR
     data_folder: /home/uday/DL/SR/Data/fetal_head_data_area
-    Partial_train: true
+    Partial_train: False
     use_shuffle: true
     n_workers: 6  # per GPU
     batch_size: 1
@@ -50,7 +49,7 @@ path:
 
 #### training settings: learning rate scheme, loss
 training_params:
-  num_epochs: 2
+  num_epochs: 20
   lr_head: !!float 1e-5
   lr_body1: !!float 1e-5
   lr_body2: !!float 1e-4
