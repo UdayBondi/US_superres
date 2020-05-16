@@ -1,16 +1,17 @@
 #### general settings
-name: test
+name: EDSR_liver_area
 model: edsr
 distortion: sr
 scale: 4
-gpu_ids: 1
+gpu_ids: 2
 #### datasets
 datasets:
   color: RGB
   train:
-    name: liver_us
+    name: liver_us_area
     mode: LRHR
-    data_folder: /home/uday/DL/SR/Data/fetal_head_data_area
+    #data_folder: /home/uday/DL/SR/Data/fetal_head_data_area
+    data_folder: /home/uday/DL/SR/Data/liver_US/liver_us_data_area/Data_ori/
     Partial_train: False
     use_shuffle: true
     n_workers: 6  # per GPU
@@ -22,14 +23,6 @@ datasets:
       mean: 0.5
       std:  0.5
 
-  val:
-    name: liver_val_set
-    mode: LRHR
-    hr_dir: /mnt/SSD/xtwang/BasicSR_datasets/val_set14_part/Set14
-    lr_dir: /mnt/SSD/xtwang/BasicSR_datasets/val_set14_part/Set14_bicLRx4
-    Normalize:
-      mean: 0.5
-      std:  0.5
     
 
 #### network structures
@@ -49,7 +42,7 @@ path:
 
 #### training settings: learning rate scheme, loss
 training_params:
-  num_epochs: 20
+  num_epochs: 30
   lr_head: !!float 1e-5
   lr_body1: !!float 1e-5
   lr_body2: !!float 1e-4

@@ -109,7 +109,7 @@ class US_dataset(Dataset):
 
 	def __init__(self, root_dir, transform= None, partial_train = False):
 		"""
-		Use this class for fetal ultrasound(US) data available online. This dataset loads LR and HR images of US data 
+		Use this class for fetal ultrasound(US) (available online) and liver US data. This dataset loads LR and HR images of US data 
 		--------------------
 		root_dir: (str) path to folder containing US data
 		transform: Pytorch transform that would be applied to data
@@ -117,8 +117,8 @@ class US_dataset(Dataset):
 		"""
 		self.root_dir = root_dir
 		self.transform = transform
-		self.lr_list_files = glob.glob(root_dir+'LR/'+'*HC.png')
-		self.hr_list_files = glob.glob(root_dir+'HR/'+'*HC.png')
+		self.lr_list_files = glob.glob(root_dir+'LR/'+'*')
+		self.hr_list_files = glob.glob(root_dir+'HR/'+'*')
 
 		if partial_train:
 			print("$$ Loading partial data for training $$")
