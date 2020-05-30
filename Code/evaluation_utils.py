@@ -7,7 +7,6 @@ This script can also be used to measure the PSNR between two images when run on 
 """
 
 
-import skimage 
 import scipy
 from matplotlib.image import imread
 import scipy.misc as sc_msc
@@ -16,7 +15,7 @@ import numpy as np
 import math
 import argparse
 import os
-
+from skimage.metrics import structural_similarity as ssim
 	
 def psnr(img1, img2):
 
@@ -54,6 +53,15 @@ def calculate_psnr(lr_img, hr_img):
 	assert hr_img.shape==lr_img.shape, "Both the images dont have the same dimensions"
 
 	return psnr(hr_img, lr_img)
+
+def calculate_ssim(lr_img, hr_img):
+	hr_img = get_single_channel(hr_img)
+	lr_img = get_single_channel(lr_img)
+
+	assert hr_img.shape==lr_img.shape, "Both the images dont have the same dimensions"
+
+	return ssim(hr_img, lr_img, data_range = lr_img.max() - lr_img.min())
+
 
 class log2file():
 

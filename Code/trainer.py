@@ -17,7 +17,7 @@ import pdb
 from tqdm import tqdm
 from data.data_utils import get_patches, reconstruct_image_from_patches, create_directory 
 import math
-from evaluation_utils import calculate_psnr, log2file
+from evaluation_utils import calculate_psnr, log2file, calculate_ssim
 from skimage import io
 import scipy.misc as sc_msc
 import cv2
@@ -129,6 +129,7 @@ def test_model(model, dataloaders, dataset_sizes, device, opts):
 	test_save_path = opts['path']['save_path']+'test_'+opts['name']+'/'
 	progress = log2file(test_save_path)
 	running_acc = 0
+	running_ssim = 0
 
 	for sample in tqdm(dataloaders['val']):
 		
@@ -139,9 +140,11 @@ def test_model(model, dataloaders, dataset_sizes, device, opts):
 		outputs = model(inputs)
 		recon_out = reconstruct_image_from_patches(outputs.cpu().detach().numpy(), (56*4,56*4))
 		running_acc = calculate_psnr(recon_out*255, labels.numpy()[0,0]*255)
+		running_ssim = calculate_ssim(recon_out*255, labels.numpy()[0,0]*255)
 
 		io.imsave(test_save_path+img_name+'.png', recon_out)
 		progress._log("PSNR: {}".format(running_acc))
+		progress._log("SSIM: {}".format(running_ssim))
 		progress._log("Name: {} \n ------------".format(img_name))
 
 def fine_tune_edsr(model, us_dataloader, dataset_sizes, device, opts):
