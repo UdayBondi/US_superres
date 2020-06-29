@@ -113,6 +113,7 @@ def downsample_img(img, method, scale):
 	method: Interpolation technique to be used. select from [bicubic / nearest/ area/ linear]
 	scale: Downsampling factor
 	"""
+	img = cv2.GaussianBlur(img, (7,7))
 	if method=='bicubic':
 		red_img = cv2.resize(img,None,fx=scale, fy=scale, interpolation = cv2.INTER_CUBIC)
 	
