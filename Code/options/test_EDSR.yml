@@ -1,0 +1,47 @@
+#### general settings
+name: EDSR_liver_area
+model: edsr
+distortion: sr
+scale: 4
+gpu_ids: 0
+
+#### datasets
+datasets:
+  color: RGB
+  test:
+    name: liver_us_area
+    mode: LRHR
+
+    #Provide the location of test data's folder. Ensure the path ends with /
+    #data_folder: /home/uday/DL/SR/Data/fetal_head_data_area/test/
+    data_folder: /home/uday/DL/SR/Data/liver_US/liver_us_data_area/Data_ori/test/
+    Partial_train: False
+    use_shuffle: true
+    n_workers: 6  # per GPU
+    batch_size: 1
+    GT_size: 128
+    use_flip: true
+    use_rot: true
+    Normalize:
+      mean: 0.5
+      std:  0.5
+
+    
+
+#### network structures
+network:
+  n_resblocks: 32
+  n_feats: 256
+  scale: 4
+  rgb_range: 1
+  n_colors: 3
+  res_scale: 0.1
+
+#### path
+path:
+  best_model: ../results/train_EDSR_liver_area/EDSR_liver_area_best_model.pt
+  save_path: ../results/EDSR_liverArea
+
+
+
+
